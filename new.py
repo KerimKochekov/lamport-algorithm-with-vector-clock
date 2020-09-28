@@ -1,7 +1,4 @@
 from multiprocessing import Process, Pipe
-from os import getpid
-from datetime import datetime
-
 
 def update(recv_time_stamp, counter):
 	for id  in range(len(counter)):
