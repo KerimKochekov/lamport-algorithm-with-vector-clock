@@ -6,7 +6,6 @@ from datetime import datetime
 def local_time(counter):
 	return ' (LAMPORT_TIME={}, LOCAL_TIME={})'.format(counter, datetime.now())
 
-
 def update(recv_time_stamp, counter):
 	for id  in range(len(counter)):
 		counter[id] = max(recv_time_stamp[id], counter[id])
