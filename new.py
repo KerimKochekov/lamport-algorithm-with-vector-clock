@@ -29,7 +29,6 @@ def receive(pipe, pid, counter):
 	print('Received at ' + str(pid) + local_time(counter))
 	return counter
 
-
 def A(ab):
 	pid = 0
 	counter = [0, 0, 0]
@@ -40,7 +39,6 @@ def A(ab):
 	counter = event(pid, counter)
 	counter = receive(ab, pid, counter)
 	counter = receive(ab, pid, counter)
-
 
 def B(ba, bc):
 	pid = 1
@@ -54,7 +52,6 @@ def B(ba, bc):
 	counter = send(ba, pid, counter)
 	counter = send(ba, pid, counter)
 
-
 def C(cb):
 	pid = 2
 	counter = [0, 0, 0]
@@ -62,7 +59,6 @@ def C(cb):
 	counter = event(pid, counter)
 	counter = send(cb, pid, counter)
 	counter = receive(cb, pid, counter)
-
 
 if __name__ == '__main__':
 	ab, ba = Pipe()
@@ -72,12 +68,10 @@ if __name__ == '__main__':
 	process2 = Process(target=B, args=(ba, bc))
 	process3 = Process(target=C, args=(cb,))
 
-	
 	process3.start()
 	process1.start()
 	process2.start()
 
-	
 	process2.join()
 	process1.join()
 	process3.join()
