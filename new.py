@@ -3,9 +3,6 @@ from os import getpid
 from datetime import datetime
 
 
-def local_time(counter):
-	return ' (LAMPORT_TIME={}, LOCAL_TIME={})'.format(counter, datetime.now())
-
 def update(recv_time_stamp, counter):
 	for id  in range(len(counter)):
 		counter[id] = max(recv_time_stamp[id], counter[id])
@@ -13,19 +10,16 @@ def update(recv_time_stamp, counter):
 
 def event(pid, counter):
 	counter[pid] += 1
-	print('Event in {} !'.format(pid) + local_time(counter))
 	return counter
 
 def send(pipe, pid, counter):
 	counter[pid] += 1
-	pipe.send(('Empty shell', counter))
-	print('Sent from ' + str(pid) + local_time(counter))
+	pipe.send(('Message', counter))
 	return counter
 
 def receive(pipe, pid, counter):
 	_, timestamp = pipe.recv()
 	counter = update(timestamp, counter)
-	print('Received at ' + str(pid) + local_time(counter))
 	return counter
 
 def A(ab):
@@ -38,6 +32,7 @@ def A(ab):
 	counter = event(pid, counter)
 	counter = receive(ab, pid, counter)
 	counter = receive(ab, pid, counter)
+	print("Process A" + str(counter))
 
 def B(ba, bc):
 	pid = 1
@@ -50,6 +45,7 @@ def B(ba, bc):
 	counter = receive(ba, pid, counter)
 	counter = send(ba, pid, counter)
 	counter = send(ba, pid, counter)
+	print("Process B" + str(counter))
 
 def C(cb):
 	pid = 2
@@ -58,6 +54,7 @@ def C(cb):
 	counter = event(pid, counter)
 	counter = send(cb, pid, counter)
 	counter = receive(cb, pid, counter)
+	print("Process C" + str(counter))
 
 if __name__ == '__main__':
 	ab, ba = Pipe()
